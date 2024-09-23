@@ -11,7 +11,7 @@ namespace API_Talento_E_Cundi.Models
         public int Id { get; set; }
 
         [Column("nombre")]
-        [MaxLength(50)]
+        [MaxLength(60)]
         public string Nombre { get; set; }
 
         [Column("tiempo_minutos")]
