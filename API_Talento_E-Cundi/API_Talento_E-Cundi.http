@@ -1,0 +1,6 @@
+@API_Talento_E_Cundi_HostAddress = http://localhost:5278
+
+GET {{API_Talento_E_Cundi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
