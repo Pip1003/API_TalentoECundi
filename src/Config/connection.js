@@ -1,21 +1,26 @@
-import mysql from 'mysql2';
-import settings from './config.json' assert { type: 'json' }; // Se añade la aserción de tipo JSON
+import { Sequelize } from 'sequelize';
+import settings from './config.json' assert { type: 'json' }; // Configuración de la base de datos desde un archivo JSON
 
-let connection;
+const sequelize = new Sequelize(
+  settings.database,  
+  settings.user,       
+  settings.password, 
+  {
+    host: settings.host,
+    port: settings.port,
+    dialect: 'mysql',  
+    logging: false     
+  }
+);
 
 export async function connectDatabase() {
-  if (!connection) {
-    connection = await mysql.createConnection(settings);
-
-    connection.connect(function (err) {
-      if (!err) {
-        console.log('Base de Datos Conectada');
-      } else {
-        console.log('Error en la conexión con la Base de Datos: ' + err);
-      }
-    });
+  try {
+    await sequelize.authenticate();
+    console.log('Base de datos conectada con Sequelize.');
+  } catch (error) {
+    console.error('Error al conectar la base de datos:', error);
   }
-  return connection;
 }
 
+export default sequelize;
 
