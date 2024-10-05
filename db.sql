@@ -83,7 +83,7 @@ CREATE TABLE Oferta (
     id_ubicacion_oferta INT NOT NULL,
     descripcion TEXT NOT NULL,
     fecha_publicacion DATETIME NOT NULL,
-    fecha_cierre DATETIME NOT NULL,
+    fecha_cierre DATETIME NOT NULL, 
     estado VARCHAR(1) NOT NULL,
     salario DECIMAL(18, 2) NOT NULL,
     tipo_contrato VARCHAR(20) NOT NULL,
@@ -181,3 +181,11 @@ CREATE TABLE HabilidadPregunta (
     FOREIGN KEY (habilidad_id) REFERENCES Habilidad(id),
     FOREIGN KEY (pregunta_id) REFERENCES Pregunta(id)
 );
+
+-- Inserciones por defecto
+INSERT INTO `rol` (`id`, `nombre`) VALUES (NULL, 'Egresado'), (NULL, 'Empresa');
+
+INSERT INTO `habilidad` (`id`, `nombre`) VALUES (NULL, '.NET '), (NULL, 'API'), (NULL, 'Javascript'),
+(NULL, 'Metodologías Agiles'), (NULL, 'Matemáticas '), (NULL, 'Nuevas tecnologías'), (NULL, 'Análisis de datos'), (NULL, 'Programación');
+
+

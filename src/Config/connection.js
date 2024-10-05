@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import settings from './config.json' assert { type: 'json' }; // Configuración de la base de datos desde un archivo JSON
+import settings from './config.json' assert { type: 'json' }; 
 
 const sequelize = new Sequelize(
   settings.database,  
