@@ -9,6 +9,7 @@ import './src/Models/PreguntaModel.js';
 import './src/Models/OpcionModel.js';
 import './src/Models/HabilidadModel.js';
 import './src/Models/HabilidadPreguntaModel.js';
+import './src/Models/RespuestaEgresadoModel.js';
 
 // Importar las relaciones entre modelos
 import './src/Config/relationships.js';
@@ -21,6 +22,7 @@ import registroRoutes from './src/Routes/RegistroRoutes.js';
 import loginRoutes from './src/Routes/LoginRoutes.js';
 import RecuperarRoutes from './src/Routes/RecuperarRoutes.js';
 import TestRoutes from './src/Routes/TestRoutes.js';
+import PerfilRoutes from './src/Routes/PerfilRoutes.js';
 
 const app = express();
 
@@ -36,7 +38,8 @@ app.use(bodyParser.urlencoded({ extended: false })); //recibe url codificada
 app.use('/api/v1', registroRoutes);
 app.use('/api/v1', loginRoutes);
 app.use('/api/v1', RecuperarRoutes);
-app.use('/api/v1', TestRoutes);
+app.use('/api/v1', /* verifyToken, */ TestRoutes);
+app.use('/api/v1', /*verifyToken,*/ PerfilRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -3,7 +3,7 @@ import Pregunta from '../Models/PreguntaModel.js';
 import Opcion from '../Models/OpcionModel.js';
 import Habilidad from '../Models/HabilidadModel.js';
 import HabilidadPregunta from '../Models/HabilidadPreguntaModel.js';
-
+import RespuestaEgresado from '../Models/RespuestaEgresadoModel.js';
 
 Test.hasMany(Pregunta, { foreignKey: 'test_id', as: 'preguntas' });
 Pregunta.belongsTo(Test, { foreignKey: 'test_id', as: 'test' });
@@ -21,4 +21,10 @@ Habilidad.belongsToMany(Pregunta, {
   through: HabilidadPregunta,
   foreignKey: 'habilidad_id',
   as: 'preguntas',
+});
+
+
+RespuestaEgresado.belongsTo(Pregunta, {
+  foreignKey: 'id_pregunta',
+  as: 'pregunta'  
 });
