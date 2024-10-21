@@ -6,6 +6,7 @@ import HabilidadPregunta from '../Models/HabilidadPreguntaModel.js';
 import TestEgresado from '../Models/TestEgresadoModel.js';
 import RespuestaEgresado from '../Models/RespuestaEgresadoModel.js';
 import sequelize from '../Config/connection.js';
+import { Buffer } from 'buffer';
 
 export const crearTestConPreguntas = async (req, res) => {
   const { nombre, tiempo_minutos, preguntas } = req.body;
@@ -86,6 +87,13 @@ export const obtenerTestConDetalles = async (req, res) => {
     if (!test) {
       return res.status(404).json({ message: 'Test no encontrado' });
     }
+
+    // Convertir las imágenes de las preguntas en base64 si existen
+    test.preguntas.forEach((pregunta) => {
+      if (pregunta.imagen) {
+        pregunta.imagen = Buffer.from(pregunta.imagen).toString('base64');
+      }
+    });
 
     res.status(200).json(test);
   } catch (error) {
@@ -281,6 +289,11 @@ export const obtenerResultadosConHabilidades = async (req, res) => {
     for (const respuesta of respuestas) {
       const pregunta = respuesta.pregunta;
 
+      // Convertir la imagen de la pregunta en base64 si existe
+      if (pregunta.imagen) {
+        pregunta.imagen = Buffer.from(pregunta.imagen).toString('base64');
+      }
+
       // Encontrar la opción correcta de la pregunta
       const opcionCorrecta = pregunta.opciones.find(opcion => opcion.respuesta === true);
 
@@ -294,6 +307,7 @@ export const obtenerResultadosConHabilidades = async (req, res) => {
       respuestasDetalle.push({
         id_pregunta: pregunta.id,
         contenido_pregunta: pregunta.contenido,
+        imagen: pregunta.imagen,
         id_opcion_seleccionada: respuesta.id_opcion_respuesta,
         es_correcta: esCorrecta,
         contenido_opcion_seleccionada: opcionSeleccionada ? opcionSeleccionada.contenido : null,

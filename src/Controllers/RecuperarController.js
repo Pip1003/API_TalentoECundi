@@ -19,7 +19,7 @@ export const solicitarRecuperacion = async (req, res) => {
         // Generar un código de 6 dígitos aleatorio
         const codigoRecuperacion = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Generar el token con el código de recuperación y un tiempo de expiración de 15 minutos
+        // Generar el token con el código de recuperación y un tiempo de expiración 
         const token = jwt.sign(
             { id_usuario: usuario.id, correo: usuario.correo, codigoRecuperacion },
             secretKey,
@@ -39,7 +39,7 @@ export const solicitarRecuperacion = async (req, res) => {
             from: 'yimmernicolas@gmail.com',
             to: correo,
             subject: 'Código de recuperación de contraseña',
-            text: `Tu código de recuperación es: ${codigoRecuperacion}. Este código expira en 15 minutos.`
+            text: `Tu código de recuperación es: ${codigoRecuperacion}. Este código expira en una hora.`
         };
 
         await transporter.sendMail(mailOptions);

@@ -3,14 +3,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { connectDatabase } from './src/Config/connection.js';
 
-// Importe de modelos
-import './src/Models/TestModel.js';
-import './src/Models/PreguntaModel.js';
-import './src/Models/OpcionModel.js';
-import './src/Models/HabilidadModel.js';
-import './src/Models/HabilidadPreguntaModel.js';
-import './src/Models/RespuestaEgresadoModel.js';
-
 // Importar las relaciones entre modelos
 import './src/Config/relationships.js';
 
@@ -23,6 +15,11 @@ import loginRoutes from './src/Routes/LoginRoutes.js';
 import RecuperarRoutes from './src/Routes/RecuperarRoutes.js';
 import TestRoutes from './src/Routes/TestRoutes.js';
 import PerfilRoutes from './src/Routes/PerfilRoutes.js';
+import TituloRoutes from './src/Routes/TitulosRoutes.js';
+import UbicacionRoutes from './src/Routes/UbicacionRoutes.js';
+import OfertaRoutes from './src/Routes/OfertaRoutes.js';
+import InscripcionRoutes from './src/Routes/InscripcionRoutes.js';
+import NotificacionRoutes from './src/Routes/NotificacionRoutes.js';
 
 const app = express();
 
@@ -35,11 +32,20 @@ app.use(bodyParser.json({ type: 'application/json', limit: '10mb' }));//recibe u
 app.use(bodyParser.urlencoded({ extended: false })); //recibe url codificada
 
 // Rutas
-app.use('/api/v1', registroRoutes);
-app.use('/api/v1', loginRoutes);
-app.use('/api/v1', RecuperarRoutes);
-app.use('/api/v1', /* verifyToken, */ TestRoutes);
-app.use('/api/v1', /*verifyToken,*/ PerfilRoutes);
+const apiRouter = express.Router();
+
+apiRouter.use(registroRoutes);
+apiRouter.use(loginRoutes);
+apiRouter.use(RecuperarRoutes);
+apiRouter.use(/* verifyToken, */ TestRoutes);
+apiRouter.use(/* verifyToken, */ PerfilRoutes);
+apiRouter.use(TituloRoutes);
+apiRouter.use(UbicacionRoutes);
+apiRouter.use(/* verifyToken, */ OfertaRoutes);
+apiRouter.use(/* verifyToken, */ InscripcionRoutes);
+apiRouter.use(/* verifyToken, */ NotificacionRoutes);
+
+app.use('/api/v1', apiRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -28,16 +28,20 @@ export const login = async (req, res) => {
         );
 
         let id_relacionado = null;
+        let imagen = null;
 
         // Verificar el rol del usuario
         if (usuario.id_rol === 1) {
-            // Si es un egresado, obtener el id_egresado
+            // Si es un egresado, obtener el id_egresado y la imagen
             const egresado = await Egresado.findOne({ where: { id_usuario: usuario.id } });
             id_relacionado = egresado ? egresado.id : null;
+            imagen = egresado.imagen_perfil
+             ? egresado.imagen_perfil.toString('base64') : null;
         } else if (usuario.id_rol === 2) {
-            // Si es un empresasario, obtener el id_empresa
+            // Si es un empresasario, obtener el id_empresa y la imagen
             const empresario = await Empresa.findOne({ where: { id_usuario: usuario.id } });
             id_relacionado = empresario ? empresario.id : null;
+            imagen = empresario.logo ? empresario.logo.toString('base64') : null;
         }
 
         // Responder con el token y los datos del usuario
@@ -48,7 +52,8 @@ export const login = async (req, res) => {
                 id: usuario.id,
                 correo: usuario.correo,
                 id_rol: usuario.id_rol,
-                id_relacionado 
+                id_relacionado,
+                imagen
             }
         });
     } catch (error) {
