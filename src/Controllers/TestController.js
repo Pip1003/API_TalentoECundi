@@ -8,49 +8,15 @@ import RespuestaEgresado from '../Models/RespuestaEgresadoModel.js';
 import sequelize from '../Config/connection.js';
 import { Buffer } from 'buffer';
 
-export const crearTestConPreguntas = async (req, res) => {
-  const { nombre, tiempo_minutos, preguntas } = req.body;
-
-  const transaction = await sequelize.transaction();
+export const crearTest = async (req, res) => {
+  const { nombre, tiempo_minutos } = req.body;
 
   try {
     // Crear el test
-    const test = await Test.create({ nombre, tiempo_minutos }, { transaction });
-
-    // Recorrer las preguntas para crearlas
-    for (const preguntaData of preguntas) {
-      const { contenido, imagen, opciones, habilidades } = preguntaData;
-
-      // Crear la pregunta
-      const pregunta = await Pregunta.create(
-        { contenido, imagen, test_id: test.id },
-        { transaction }
-      );
-
-      // Crear las opciones para la pregunta
-      for (const opcionData of opciones) {
-        await Opcion.create(
-          { contenido: opcionData.contenido, respuesta: opcionData.respuesta, pregunta_id: pregunta.id },
-          { transaction }
-        );
-      }
-
-      // Asociar habilidades a la pregunta
-      for (const habilidadId of habilidades) {
-        await HabilidadPregunta.create(
-          { habilidad_id: habilidadId, pregunta_id: pregunta.id },
-          { transaction }
-        );
-      }
-    }
-
-    // Confirmar la transacción
-    await transaction.commit();
+    const test = await Test.create({ nombre, tiempo_minutos });
 
     res.status(201).json({ message: 'Test creado exitosamente', test });
   } catch (error) {
-    // Revertir en caso de error
-    await transaction.rollback();
     console.error(error);
     res.status(500).json({ message: 'Error creando el test', error });
   }
@@ -339,7 +305,7 @@ export const obtenerResultadosConHabilidades = async (req, res) => {
         return {
           habilidad_id: id,
           nombre: habilidad ? habilidad.nombre : null,
-          porcentaje: Math.round((correctas / total) * 100) || 0, 
+          porcentaje: Math.round((correctas / total) * 100) || 0,
         };
       })
     );
@@ -356,6 +322,32 @@ export const obtenerResultadosConHabilidades = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los resultados', error });
   }
 };
+
+export const obtenerEstadoTestEgresado = async (req, res) => {
+  const { test_id, egresado_id } = req.params;
+
+  try {
+    // Buscar el registro de TestEgresado para el test y egresado
+    const testEgresado = await TestEgresado.findOne({
+      where: { test_id, egresado_id },
+    });
+
+    // Verificar si el registro existe
+    if (!testEgresado) {
+      return res.status(404).json({ message: 'No se encontró un registro para el egresado y test' });
+    }
+
+    // Retornar el estado del test
+    res.status(200).json({
+      message: 'Estado del test obtenido exitosamente',
+      estado: testEgresado.estado
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error obteniendo el estado del TestEgresado', error });
+  }
+};
+
 
 
 

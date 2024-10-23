@@ -30,13 +30,13 @@ export const solicitarRecuperacion = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'yimmernicolas@gmail.com',
-                pass: 'ovjf hogc xtjr dahi'
+                user: 'pipediazcampos1429@gmail.com',
+                pass: 'hxny swbd tlfw zflm'
             }
         });
 
         const mailOptions = {
-            from: 'yimmernicolas@gmail.com',
+            from: 'pipediazcampos1429@gmail.com',
             to: correo,
             subject: 'Código de recuperación de contraseña',
             text: `Tu código de recuperación es: ${codigoRecuperacion}. Este código expira en una hora.`
